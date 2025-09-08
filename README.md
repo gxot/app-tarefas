@@ -1,93 +1,366 @@
-# App Tarefas I 4A
+# Atividade avaliativa: CRUD Android (Java + SQLite)
+
+Este repositório contém orientações para o desenvolvimento de um aplicativo de gerenciamento de tarefas que poderá ser utilizado como nota parcial na Avaliação Somativa N2.
+
+O projeto consiste em desenvolver um aplicativo Android **legado**, desenvolvido em **Java**, que implementa um CRUD (Create, Read, Update, Delete) simples para gerenciar a lista de tarefas usando o banco de dados SQLite. O aplicativo deverá ser desenvolvido  seguindo o passo a passo deste tutorial e apresentado no dia da avaliação somativa N2 rodando no emulador ou em um smartphone Android.
+
+# `Atenção: atividade em EQUIPE!`
+
+## Objetivo da atividade
+Desenvolver um aplicativo Android (Legado) conforme aparece nas telas abaixo que permita:
+- Adicionar tarefa
+- Listar tarefas
+- Editar tarefa
+- Excluir tarefa
+
+### Layout das telas
+### ![Visual do aplicativo](docs/layout.png)
+
+## Orientações gerais
+
+Regras básicas:
+- O  projeto deverá ser construído EM EQUIPE.
+- ``Cada commit deverá ser alternado entre os integrantes``.
+- Implementar o app conforme descrito neste tutorial.
+- Nomear o projeto como **AppTarefasExx**.
+- Usar o pacote **br.equipexx**.
+
+Cada equipe deverá desenvolver o aplicativo chamado **AppTarefasExx** (`padrão obrigatório`), onde `Exx` é o número ou codinome da equipe, por exemplo `AppTarefasE01` ou `AppTarefasCodinome` e o pacote `br.e01`ou `br.codinome`. 
+
+# Versionamento de código
 
 
+`Atenção: só serão considerados válidos os projetos que seguirem estritamente as orientações e etapas de versionamento de códigos especificadas neste repositório.`
 
-## Getting started
+O projeto a ser desenvolvido deverá ser versionado, `obrigatoriamente`, em um **Fork** deste repositório e deverá ter os seguintes commits após cada etapa:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+1. Criação do AppTarefas
+2. Criação da MainActivity
+3. Layout da tela principal
+4. Layout do item da lista
+5. Criação da FormActivity
+6. Layout da FormActivity
+7. Criação da entidade Tarefa
+8. Criação do Data Acess Object (DAO)
+9. Criação do Tarefa Adapter
+10. Inclusão do CRUD na MainActivity
+11. Programação do botão Salvar
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Como fazer *fork* do repositório (GitLab)
 
-## Add your files
+1. Acesse a página do repositório **original** no GitLab.  
+2. Clique em **Fork** (no topo à direita).  
+3. Escolha o **namespace** (sua conta/grupo) e confirme em **Fork project**.  
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
-
+## Estrutura de arquivos e pastas
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/gilbriatore/2025/android/turma-4a/app-tarefas.git
-git branch -M main
-git push -uf origin main
+app/
+├── java/
+│   └── br.equipexx.ui/
+│   │   ├── MainActivity.java
+│   │   └── FormActivity.java
+│   └── br.equipexx.model/
+│   │   └── Tarefa.java
+│   └── br.equipexx.db/
+│   │   └── TarefaDAO.java
+│   └── br.equipexx.adapter/
+│       └── TarefaAdapter.java
+└── res/
+    └── layout/
+        ├── activity_main.xml
+        ├── activity_form.xml
+        └── item_tarefa.xml
+```
+## Tutorial Passo a Passo
+
+### 1. Crie o projeto no Android Studio
+- Nome: **AppTarefasExx** ```Obs.: é obrigatório incluir o número da equipe no lugar de xx.```
+
+- Linguagem: **Java**
+- Tipo de activity: **No Activity**
+- Package name: `br.equipexx`  
+# `Atenção: ao criar o projeto certifique-se de definir o Save Location para o repositório de fork/clone.`
+
+### ![Visual do aplicativo](docs/novo_projeto.png)
+
+### 2) Adicione os pacotes
+```
+br.equipexx
+ ├─ ui
+ ├─ model
+ ├─ db
+ └─ adapter
+```
+### 2. Crie a tela principal – `MainActivity.java`
+- Adicione uma Empty Views Activity como o nome MainActivity e defina-a como launcher activity.
+### ![Visual do aplicativo](docs/tela_principal.png)
+
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Criação da MainActivity"
+  git push
+```
+### 3. Defina o layout da tela principal – `activity_main.xml`
+- Converta o layout activity_main.xml para LinearLayout:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity"
+    android:orientation="vertical"
+    android:paddingTop="100dp">
+
+</LinearLayout>
+```
+- Adicione um Button com o nome "Nova tarefa" e defina seu id+ como btnNovaTarefa.
+- Adicione uma ListView e defina seu id+ como lvTarefas.
+```xml
+    <Button
+        android:id="@+id/btnNovaTarefa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nova tarefa" />
+
+    <ListView
+        android:id="@+id/lvTarefas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 ```
 
-## Integrate with your tools
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Layout da tela principal"
+  git push
+```
 
-- [ ] [Set up project integrations](https://gitlab.com/gilbriatore/2025/android/turma-4a/app-tarefas/-/settings/integrations)
+### 4. Crie o layout o item da lista – `item_tarefa.xml`
+- Na pasta res/layout inclua novo arquivo chamado  **item_tarefa.xml** que será usado para cada item exibido no `ListView`.
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
-## Collaborate with your team
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título da tarefa"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+    <TextView
+        android:id="@+id/tvDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrição da tarefa"
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+</LinearLayout>
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Layout do item da lista"
+  git push
+```
 
-## Test and Deploy
+### 5. Crie a segunda tela – `FormActivity.java`
+- Adicione uma Empty Views Activity como o nome FormActivity.
 
-Use the built-in continuous integration in GitLab.
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Criação da FormActivity"
+  git push
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### 6. Defina o layout da segunda tela – `activity_form.xml`
+- Converta o layout activity_form.xml para LinearLayout:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.FormActivity"
+    android:orientation="vertical"
+    android:paddingTop="100dp"
+    android:paddingLeft="30sp"
+    android:paddingRight="30sp">
 
-***
+</LinearLayout>
+```
+- Adicione os TextViews, EditTexts e o Button com seus parâmetros.
+```xml
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:text="CADASTRO DE TAREFAS"
+        android:paddingBottom="20dp"/>
 
-# Editing this README
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Título" />
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+    <EditText
+        android:id="@+id/etTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Digite o título da tarefa" />
 
-## Suggestions for a good README
+    <TextView
+        android:id="@+id/txtDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descrição" />
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+    <EditText
+        android:id="@+id/edtDescricao"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Digite a descrição da tarefa" />
 
-## Name
-Choose a self-explaining name for your project.
+    <Button
+        android:id="@+id/btnSalvar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar" />
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Layout da FormActivity"
+  git push
+```
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+### 7. Criar a entidade – `Tarefa.java`
+Representa uma tarefa com `id`, `titulo` e `descricao`.
+```java
+package br.equipe99.app.model;
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+public class Tarefa implements Serializable {
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+    //Desenvolver código...
+}
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Criação da entidade Tarefa"
+  git push
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### 8. Criar o DAO com SQLite – `TarefaDAO.java`
+- Apenas esqueleto. Desenvolver código principal.
+- Classe responsável pelo **acesso ao banco de dados**.
+- Estende `SQLiteOpenHelper`.
+- Cria a tabela `tarefas`.
+- Implementa os métodos:
+  - **inserir**
+  - **listar**
+  - **atualizar**
+  - **deletar**
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```java
+package br.equipe99.app.db;
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+public class TarefaDAO extends SQLiteOpenHelper {
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+     //Desenvolver código...
+    
+}
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Criação do Data Acess Object (DAO)"
+  git push
+```
+### 6. Crie um adapter para a tarefa – `TarefaAdapter.java`
+- Apenas esqueleto. Desenvolver código principal.
+- Define como cada item da lista será exibido usando `item_tarefa.xml` e herda funções de `ArrayAdapter<Tarefa>`.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```java
+package br.equipe99.app.adapter;
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+public class TarefaAdapter extends ArrayAdapter<Tarefa> {
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+     //Desenvolver código...
+}
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Criação do Tarefa Adapter"
+  git push
+```
 
-## License
-For open source projects, say how it is licensed.
+### 7. Adicione as funções de listar, incluir, editar e excluir na tela principal – `MainActivity.java`
+- Apenas esqueleto. Desenvolver código principal.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```java
+package br.equipe99.app.ui;
+
+public class MainActivity extends AppCompatActivity {
+
+     //Desenvolver código...
+}
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Inclusão do CRUD na MainActivity"
+  git push
+```
+
+### 8. Adicione a função de salvar na segunda tela – `FormActivity.java`
+- Apenas esqueleto. Desenvolver código principal.
+
+```java
+package br.equipe99.app.ui;
+
+public class FormActivity extends AppCompatActivity {
+
+     //Desenvolver código...
+}
+```
+`Realize o commit obrigatório:`
+```
+  git add .
+  git commit -m "Programação do botão Salvar"
+  git push
+```
+
+### 9. Rode o aplicativo e teste as funcionalidades
+- Inserir nova tarefa.
+- Editar tarefa existente.
+- Excluir com confirmação.
+---
+
+Professor: **Geucimar Briatore**
