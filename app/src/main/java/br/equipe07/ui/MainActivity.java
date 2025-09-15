@@ -64,15 +64,16 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-
+        // Listar ao iniciar
         recarregarLista();
 
+        // Criar nova tarefa (abre FormActivity sem id)
         btnNovaTarefa.setOnClickListener(v -> {
             Intent intent = new Intent(this, FormActivity.class);
             formLauncher.launch(intent);
         });
 
-
+        // Editar ao clicar (abre FormActivity com id e dados atuais)
         lvTarefas.setOnItemClickListener((parent, view, position, id) -> {
             if (position >= 0 && position < lista.size()) {
                 Tarefa t = lista.get(position);
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        // Excluir no clique longo (persiste no banco)
         lvTarefas.setOnItemLongClickListener((parent, view, position, id) -> {
             if (position >= 0 && position < lista.size()) {
                 Tarefa t = lista.get(position);
