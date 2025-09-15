@@ -15,7 +15,7 @@ import br.equipe07.R;
 
 public class FormActivity extends AppCompatActivity {
 
-
+    Button btnSalvar;
     EditText etTitulo;
     EditText edtDescricao;
 
@@ -31,10 +31,19 @@ public class FormActivity extends AppCompatActivity {
             return insets;
         });
 
-
+        btnSalvar = findViewById(R.id.btnSalvar);
         etTitulo = findViewById(R.id.etTitulo);
         edtDescricao = findViewById(R.id.edtDescricao);
 
+        btnSalvar.setOnClickListener(v -> {
+            String titulo = etTitulo.getText().toString();
+            String descricao = edtDescricao.getText().toString();
+            
+            TarefaDAO dao = new TarefaDAO(this);
+            dao.inserir(titulo, descricao, "");
 
+            setResult(RESULT_OK);
+            finish();
+        });
     }
 }
