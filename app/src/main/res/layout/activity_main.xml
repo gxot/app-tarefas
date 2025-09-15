@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity"
     android:orientation="vertical"
-    android:paddingTop="100dp">
+    android:paddingTop="100dp"
+    tools:context=".ui.MainActivity">
 
     <Button
         android:id="@+id/btnNovaTarefa"
@@ -18,6 +18,11 @@
     <ListView
         android:id="@+id/lvTarefas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="?android:attr/listDivider"
+        android:dividerHeight="1dp"
+        android:padding="8dp"
+        tools:listitem="@layout/item_tarefa" />
 
 </LinearLayout>

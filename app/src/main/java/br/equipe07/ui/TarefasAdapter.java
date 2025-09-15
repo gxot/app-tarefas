@@ -16,35 +16,27 @@ import br.equipe07.R;
 
 public class TarefasAdapter extends ArrayAdapter<Tarefa> {
 
-    private final LayoutInflater inflater;
-
     public TarefasAdapter(@NonNull Context context, @NonNull List<Tarefa> itens) {
         super(context, 0, itens);
-        this.inflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view = convertView;
-        if (view == null) {
-            view = inflater.inflate(R.layout.item_tarefa, parent, false);
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        View v = convertView;
+        if (v == null) {
+            v = LayoutInflater.from(getContext()).inflate(R.layout.item_tarefa, parent, false);
         }
+        Tarefa t = getItem(position);
 
-        TextView tvTitulo = view.findViewById(R.id.tvTitulo);
-        TextView tvDescricao = view.findViewById(R.id.tvDescricao);
+        TextView tvTitulo = v.findViewById(R.id.tvTitulo);
+        TextView tvDescricao = v.findViewById(R.id.tvDescricao);
 
-        Tarefa tarefa = getItem(position);
-        if (tarefa != null) {
-            tvTitulo.setText(confereNull(tarefa.getTitulo()));
-            tvDescricao.setText(confereNull(tarefa.getDescricao()));
+        if (t != null) {
+            tvTitulo.setText(t.getTitulo());
+            tvDescricao.setText(t.getDescricao());
         }
-
-        return view;
-    }
-
-    private String confereNull(String s) {
-        return s == null ? "" : s;
+        return v;
     }
 }
 
