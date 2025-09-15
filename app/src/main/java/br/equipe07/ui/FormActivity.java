@@ -19,6 +19,8 @@ public class FormActivity extends AppCompatActivity {
     EditText etTitulo;
     EditText edtDescricao;
 
+    long tarefaId = -1L;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +37,28 @@ public class FormActivity extends AppCompatActivity {
         etTitulo = findViewById(R.id.etTitulo);
         edtDescricao = findViewById(R.id.edtDescricao);
 
+        if (getIntent() != null && getIntent().hasExtra("id")) {
+            tarefaId = getIntent().getLongExtra("id", -1L);
+            String titulo = getIntent().getStringExtra("titulo");
+            String descricao = getIntent().getStringExtra("descricao");
+            if (titulo != null) etTitulo.setText(titulo);
+            if (descricao != null) edtDescricao.setText(descricao);
+            btnSalvar.setText("Atualizar");
+        } else {
+            btnSalvar.setText("Salvar");
+        }
+
         btnSalvar.setOnClickListener(v -> {
             String titulo = etTitulo.getText().toString();
             String descricao = edtDescricao.getText().toString();
-            
+
             TarefaDAO dao = new TarefaDAO(this);
-            dao.inserir(titulo, descricao, "");
+
+            if (tarefaId >= 0) {
+                dao.atualizar(tarefaId, titulo, descricao, "");
+            } else {
+                dao.inserir(titulo, descricao, "");
+            }
 
             setResult(RESULT_OK);
             finish();

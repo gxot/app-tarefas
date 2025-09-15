@@ -30,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Tarefa> lista = new ArrayList<>();
     TarefasAdapter adapter;
-
     TarefaDAO dao;
 
-    private ActivityResultLauncher<Intent> novaTarefaLauncher;
+    private ActivityResultLauncher<Intent> formLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,40 +54,38 @@ public class MainActivity extends AppCompatActivity {
         adapter = new TarefasAdapter(this, lista);
         lvTarefas.setAdapter(adapter);
 
-        recarregarLista();
-
-        novaTarefaLauncher = registerForActivityResult(
+        formLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
                         recarregarLista();
-                        Toast.makeText(this, "Tarefa salva", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Alterações salvas", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
 
-        // Incluir: abre o formulário
+        // Listar ao iniciar
+        recarregarLista();
+
+        // Criar nova tarefa (abre FormActivity sem id)
         btnNovaTarefa.setOnClickListener(v -> {
             Intent intent = new Intent(this, FormActivity.class);
-            novaTarefaLauncher.launch(intent);
+            formLauncher.launch(intent);
         });
 
+        // Editar ao clicar (abre FormActivity com id e dados atuais)
         lvTarefas.setOnItemClickListener((parent, view, position, id) -> {
             if (position >= 0 && position < lista.size()) {
                 Tarefa t = lista.get(position);
-                String novoTitulo = t.getTitulo() + " (editada)";
-                String novaDescricao = "Atualizada pelo clique";
-
-                int linhas = dao.atualizar(t.getId(), novoTitulo, novaDescricao, "");
-                if (linhas > 0) {
-                    recarregarLista();
-                    Toast.makeText(this, "Tarefa editada", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Falha ao editar", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(this, FormActivity.class);
+                intent.putExtra("id", t.getId());
+                intent.putExtra("titulo", t.getTitulo());
+                intent.putExtra("descricao", t.getDescricao());
+                formLauncher.launch(intent);
             }
         });
 
+        // Excluir no clique longo (persiste no banco)
         lvTarefas.setOnItemLongClickListener((parent, view, position, id) -> {
             if (position >= 0 && position < lista.size()) {
                 Tarefa t = lista.get(position);
