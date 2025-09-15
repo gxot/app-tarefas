@@ -15,4 +15,8 @@ public class Tarefa implements Serializable {
         this.titulo = titulo;
         this.descricao = descricao;
     }
+
+    public long getId() { return id; }
+    public String getTitulo() { return titulo; }
+    public String getDescricao() { return descricao; }
 }
